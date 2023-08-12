@@ -17,7 +17,7 @@
     </transition>
   </div>
 
-  <div class="controls mb-5 is-flex is-justify-content-right">
+  <div class="controls mb-5 is-flex is-justify-content-right" v-if="!completed">
     <button
       type="button"
       class="button is-danger has-text-weight-medium is-small"
@@ -54,12 +54,11 @@ export default {
     Question,
     QuestionHeader,
   },
-  props: ["questions", "currentQuestion"],
+  props: ["questions", "currentQuestion", "totalCorrectAnswers", "completed"],
   data() {
     return {
       answerChecked: false,
       selectedAnswer: null,
-      totalCorrectAnswers: 0,
     };
   },
   methods: {
@@ -69,9 +68,9 @@ export default {
     },
     checkAnswer() {
       const current = this.questions[this.currentQuestion];
-
+      console.log("totalCorrectAnswers:", this.totalCorrectAnswers);
       if (current.correctAnswer === this.selectedAnswer) {
-        this.totalCorrectAnswers++;
+        this.$emit("correct-answer", this.totalCorrectAnswers + 1);
       }
       this.answerChecked = true;
     },
@@ -81,7 +80,7 @@ export default {
       this.$emit("next-question");
     },
   },
-  emits: ["next-question"],
+  emits: ["next-question", "correct-answer"],
 };
 </script>
 

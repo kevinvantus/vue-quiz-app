@@ -1,11 +1,37 @@
 <template>
-  <main class="main-ctr">
+  <header class="main-header has-text-centered">
     <h1 class="is-size-5 has-text-weight-medium">Vue Quiz App</h1>
-    <callout></callout>
+  </header>
+  <main class="main-ctr">
+    <template v-if="completed">
+      <callout
+        :status="status"
+        :correct="totalCorrectAnswers"
+        :numOfQuestions="questions.length"
+      ></callout>
+      <div class="has-text-centered emoji" v-if="completed">
+        <span v-if="status === 'success'">🎊</span>
+        <span v-else>😔</span>
+      </div>
+      <div v-if="completed">
+        <button
+          type="button"
+          class="button is-danger has-text-weight-medium is-fullwidth"
+          @click="currentQuestion = 0"
+        >
+          Restart Quiz
+        </button>
+      </div>
+    </template>
+
     <questions
       :questions="questions"
       :currentQuestion="currentQuestion"
+      :totalCorrectAnswers="totalCorrectAnswers"
+      :completed="completed"
       @next-question="handleNext()"
+      @correct-answer="totalCorrectAnswers = $event"
+      v-else
     ></questions>
   </main>
   <footer class="has-text-centered">
@@ -26,7 +52,6 @@ export default {
   },
   methods: {
     handleNext() {
-      if (this.currentQuestion >= this.questions.length - 1) return;
       this.currentQuestion++;
     },
   },
@@ -34,6 +59,7 @@ export default {
     return {
       currentQuestion: 0,
       passingScore: 5,
+      totalCorrectAnswers: 0,
       questions: [
         {
           question: "What is the capital of France?",
@@ -103,6 +129,16 @@ export default {
         },
       ],
     };
+  },
+  computed: {
+    completed() {
+      return this.currentQuestion >= this.questions.length;
+    },
+    status() {
+      return this.totalCorrectAnswers >= this.passingScore
+        ? "success"
+        : "error";
+    },
   },
 };
 </script>

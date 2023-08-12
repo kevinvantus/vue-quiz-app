@@ -7,6 +7,7 @@
       @click="selectAnswer(j)"
       :class="{
         correct: correctAnswer === selectedAnswer && correctAnswer === j,
+        incorrect: answerChecked && selectedAnswer === j && correctAnswer !== j,
         'gray-out': answerChecked && correctAnswer !== j,
       }"
     >
@@ -62,6 +63,9 @@ export default {
   gap: 0.75rem;
   &.correct {
     border-color: rgba(33, 150, 83, 1);
+  }
+  &.incorrect {
+    border-color: #db3e3e;
   }
   &.gray-out {
     opacity: 0.6;
