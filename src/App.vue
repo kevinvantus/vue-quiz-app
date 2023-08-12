@@ -21,6 +21,7 @@ export default {
   data() {
     return {
       currentQuestion: 0,
+      passingScore: 5,
       questions: [
         {
           question: "What is the capital of France?",

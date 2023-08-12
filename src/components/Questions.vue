@@ -1,38 +1,40 @@
 <template>
   <div class="question-ctr" v-for="(q, i) in questions" :key="q">
-    <template v-if="currentQuestion === i">
-      <header class="question-header">
-        <h2 class="has-text-weight-medium is-size-6 is-uppercase">
-          Question {{ currentQuestion + 1 }}
-        </h2>
-      </header>
-      <section class="question-body pb-2">
-        <p class="question has-text-weight-normal">
-          {{ q.question }}
-        </p>
+    <transition name="slide" appear mode="in-out">
+      <div v-if="currentQuestion === i">
+        <header class="question-header">
+          <h2 class="has-text-weight-medium is-size-6 is-uppercase">
+            Question {{ currentQuestion + 1 }}
+          </h2>
+        </header>
+        <section class="question-body pb-2">
+          <p class="question has-text-weight-normal">
+            {{ q.question }}
+          </p>
 
-        <ul class="has-text-weight-medium">
-          <li
-            class="answer is-flex is-align-items-center"
-            v-for="(answer, j) in q.answers"
-            :key="answer"
-          >
-            <span class="is-flex-grow-1">{{ answer }}</span>
-            <ph-radio-button
-              size="20"
-              color="#219653"
-              weight="fill"
-              v-if="selectedAnswer && selectedAnswer === j"
-            ></ph-radio-button>
-            <ph-circle
-              size="20"
-              color="rgba(223, 224, 223, 1)"
-              v-else="!selectedAnswer"
-            ></ph-circle>
-          </li>
-        </ul>
-      </section>
-    </template>
+          <ul class="has-text-weight-medium">
+            <li
+              class="answer is-flex is-align-items-center"
+              v-for="(answer, j) in q.answers"
+              :key="answer"
+            >
+              <span class="is-flex-grow-1">{{ answer }}</span>
+              <ph-radio-button
+                size="20"
+                color="#219653"
+                weight="fill"
+                v-if="selectedAnswer && selectedAnswer === j"
+              ></ph-radio-button>
+              <ph-circle
+                size="20"
+                color="rgba(223, 224, 223, 1)"
+                v-else="!selectedAnswer"
+              ></ph-circle>
+            </li>
+          </ul>
+        </section>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -92,10 +94,27 @@ $padding-inline: 2.25rem;
       margin-block-end: 0.5rem;
       cursor: pointer;
 
-      &.selected {
+      &.correct {
         border-color: rgba(33, 150, 83, 1);
       }
     }
+  }
+
+  .slide-enter-from {
+    transform: translateX(0);
+  }
+  .slide-enter-to {
+    transform: translateX(100%);
+    transition: all 0.125s;
+  }
+
+  .slide-leave-from {
+    transform: translateX(100%);
+  }
+
+  .slide-leave-to {
+    transform: translateX(0);
+    transition: all 0.125s;
   }
 }
 </style>
