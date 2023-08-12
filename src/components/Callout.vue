@@ -6,13 +6,14 @@
       error: status === 'error',
     }"
   >
-    <ph-check-circle :size="16" weight="fill" />
+    <ph-check-circle :size="16" weight="fill" v-if="status === 'success'" />
+    <ph-x-circle :size="16" weight="fill" v-else />
     <p class="callout-text is-flex-grow-1 has-text-weight-medium">
       {{
         status === "success"
           ? "You passed this quiz successfully."
           : "You failed this quiz, better luck next time."
-      }}.
+      }}
     </p>
     <div class="callout-success-rate has-text-weight-medium">
       {{ correct }}/{{ numOfQuestions }}
@@ -21,11 +22,12 @@
 </template>
 
 <script>
-import { PhCheckCircle } from "@phosphor-icons/vue";
+import { PhCheckCircle, PhXCircle } from "@phosphor-icons/vue";
 
 export default {
   components: {
     PhCheckCircle,
+    PhXCircle,
   },
   props: ["status", "correct", "numOfQuestions"],
 };

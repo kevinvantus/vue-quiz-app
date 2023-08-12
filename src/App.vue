@@ -17,7 +17,7 @@
         <button
           type="button"
           class="button is-danger has-text-weight-medium is-fullwidth"
-          @click="currentQuestion = 0"
+          @click="handleReset()"
         >
           Restart Quiz
         </button>
@@ -53,6 +53,10 @@ export default {
   methods: {
     handleNext() {
       this.currentQuestion++;
+    },
+    handleReset() {
+      this.currentQuestion = 0;
+      this.totalCorrectAnswers = 0;
     },
   },
   data() {
