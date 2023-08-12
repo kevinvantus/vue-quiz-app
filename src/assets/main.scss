@@ -1,4 +1,8 @@
-/* @import "./base.css"; */
+// @import "./base.css";
+:root {
+  --padding-inline: 2.25rem;
+}
+
 body {
   // background-color: rgb(16, 24, 40);
 }
@@ -9,6 +13,14 @@ body {
 
   h1 {
     text-align: center;
-    color: rgba(16, 24, 40, 1);
+    color: #101211;
   }
+}
+
+footer {
+  color: #101211;
+  background-color: rgb(238, 238, 238);
+  padding-block: 1.25rem;
+  font-size: 0.875rem;
+  font-weight: 500;
 }

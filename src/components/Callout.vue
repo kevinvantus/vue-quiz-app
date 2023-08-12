@@ -2,7 +2,7 @@
   <div class="callout-ctr is-flex is-align-items-center">
     <ph-check-circle :size="16" weight="fill" />
     <p class="callout-text is-flex-grow-1 has-text-weight-medium">
-      You passed this module’s quiz successfully
+      You passed this quiz successfully
     </p>
     <div class="callout-success-rate"></div>
   </div>

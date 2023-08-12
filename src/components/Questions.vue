@@ -2,119 +2,118 @@
   <div class="question-ctr" v-for="(q, i) in questions" :key="q">
     <transition name="slide" appear mode="in-out">
       <div v-if="currentQuestion === i">
-        <header class="question-header">
-          <h2 class="has-text-weight-medium is-size-6 is-uppercase">
-            Question {{ currentQuestion + 1 }}
-          </h2>
-        </header>
+        <question-header :currentQuestion="currentQuestion"></question-header>
         <section class="question-body pb-2">
-          <p class="question has-text-weight-normal">
-            {{ q.question }}
-          </p>
-
-          <ul class="has-text-weight-medium">
-            <li
-              class="answer is-flex is-align-items-center"
-              v-for="(answer, j) in q.answers"
-              :key="answer"
-            >
-              <span class="is-flex-grow-1">{{ answer }}</span>
-              <ph-radio-button
-                size="20"
-                color="#219653"
-                weight="fill"
-                v-if="selectedAnswer && selectedAnswer === j"
-              ></ph-radio-button>
-              <ph-circle
-                size="20"
-                color="rgba(223, 224, 223, 1)"
-                v-else="!selectedAnswer"
-              ></ph-circle>
-            </li>
-          </ul>
+          <question :question="q.question"></question>
+          <answers
+            :answers="q.answers"
+            :correctAnswer="q.correctAnswer"
+            :selectedAnswer="selectedAnswer"
+            :answerChecked="answerChecked"
+            @select-answer="handleSelectAnswer"
+          ></answers>
         </section>
       </div>
     </transition>
   </div>
+
+  <div class="controls mb-5 is-flex is-justify-content-right">
+    <button
+      type="button"
+      class="button is-danger has-text-weight-medium is-small"
+      @click="currentQuestion = 0"
+    >
+      Reset Quiz
+    </button>
+    <button
+      type="button"
+      class="button is-dark has-text-weight-medium is-small"
+      @click="checkAnswer"
+      :disabled="selectedAnswer === null"
+    >
+      Check answer</button
+    ><button
+      type="button"
+      class="button is-success has-text-weight-medium is-small"
+      @click="nextClick"
+      :disabled="!answerChecked"
+    >
+      Next
+    </button>
+  </div>
 </template>
 
 <script>
-import { PhCircle, PhRadioButton } from "@phosphor-icons/vue";
+import Answers from "@/components/Answers.vue";
+import Question from "@/components/Question.vue";
+import QuestionHeader from "@/components/QuestionHeader.vue";
 
 export default {
   components: {
-    PhCircle,
-    PhRadioButton,
+    Answers,
+    Question,
+    QuestionHeader,
   },
   props: ["questions", "currentQuestion"],
   data() {
     return {
+      answerChecked: false,
       selectedAnswer: null,
+      totalCorrectAnswers: 0,
     };
   },
+  methods: {
+    handleSelectAnswer($event) {
+      if (this.selectedAnswer !== null) return;
+      this.selectedAnswer = $event;
+    },
+    checkAnswer() {
+      const current = this.questions[this.currentQuestion];
+
+      if (current.correctAnswer === this.selectedAnswer) {
+        this.totalCorrectAnswers++;
+      }
+      this.answerChecked = true;
+    },
+    nextClick() {
+      this.answerChecked = false;
+      this.selectedAnswer = null;
+      this.$emit("next-question");
+    },
+  },
+  emits: ["next-question"],
 };
 </script>
 
 <style lang="scss" scoped>
-$padding-inline: 2.25rem;
 .question-ctr {
-  .question-header {
-    background: rgba(238, 238, 238, 1);
-    padding: 1rem $padding-inline;
-    margin-block-end: 0.75rem;
-  }
-
   h2 {
     color: rgba(16, 18, 17, 1);
     line-height: 1.25;
   }
-
   .question-body {
-    padding-inline: $padding-inline;
-
-    .badge {
-      background: rgba(33, 150, 83, 1);
-      border-radius: 60px;
-    }
-    .question {
-      font-size: 0.875rem;
-      line-height: 1.71;
-      color: rgba(102, 112, 133, 1);
-      margin-block-end: 1.375rem;
-    }
-
-    .answer {
-      font-size: 1rem;
-      line-height: 1.25;
-      color: rgba(16, 18, 17, 1);
-      border: 0.6px solid rgba(223, 224, 223, 1);
-      border-radius: 12px;
-      background: linear-gradient(0deg, #fafafa, #fafafa);
-      padding: 1.5rem;
-      margin-block-end: 0.5rem;
-      cursor: pointer;
-
-      &.correct {
-        border-color: rgba(33, 150, 83, 1);
-      }
-    }
+    padding-inline: var(--padding-inline);
   }
+}
+.controls {
+  padding-inline: var(--padding-inline);
+  gap: 0.75rem;
+}
 
-  .slide-enter-from {
-    transform: translateX(0);
-  }
-  .slide-enter-to {
-    transform: translateX(100%);
-    transition: all 0.125s;
-  }
+.slide-enter-from {
+  transform: translateX(0);
+}
+.slide-enter-to {
+  transform: translateX(100%);
+  transition: all 0.125s;
+}
 
-  .slide-leave-from {
-    transform: translateX(100%);
-  }
+.slide-leave-from {
+  transform: translateX(100%);
+}
 
-  .slide-leave-to {
-    transform: translateX(0);
-    transition: all 0.125s;
-  }
+.slide-leave-to {
+  transform: translateX(0);
+  transition: all 0.125s;
 }
 </style>
