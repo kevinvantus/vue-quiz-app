@@ -1,0 +1,14 @@
+/* @import "./base.css"; */
+body {
+  // background-color: rgb(16, 24, 40);
+}
+.main-ctr {
+  max-width: 39.5rem;
+  margin: auto;
+  padding: 1rem;
+
+  h1 {
+    text-align: center;
+    color: rgba(16, 24, 40, 1);
+  }
+}
